@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Col, Container, Form, Image, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, FormControl, Image, Row } from "react-bootstrap";
 import "../../assets/stylesheets/pages/login.scss";
 import chatBot from "../../assets/images/chatbot.png";
 import { useFormik } from "formik";
@@ -14,14 +14,14 @@ const Login = () => {
   const dispatch = useDispatch();
   const { values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting } = useFormik({
     initialValues: {
-      email: "",
+      username: "",
       password: ""
     },
     onSubmit: (values, { setSubmitting }) => {
       dispatch(
         loginRequest(
           {
-            ...(regexExpressions.email.test(values.email) ? { email: values?.email } : {}),
+            ...(regexExpressions.username.test(values.username) ? { username: values?.username } : {}),
             password: values?.password,
           }
         )
@@ -46,24 +46,44 @@ const Login = () => {
               </aside>
               <Form onSubmit={handleSubmit}>
                 <Form.Group>
-                  <Form.Label>Email</Form.Label>
-                  <Form.Control
-                    type="email"
+                  <Form.Label>Username</Form.Label>
+                  <FormControl
+                    type="text"
+                    name="username"
                     onChange={handleChange}
                     onBlur={handleChange}
-                    value={values.email.toLowerCase()}
+                    value={values.username.toLowerCase()}
+                    isInvalid={!!(errors.username !== undefined && touched.username !== undefined)}
                   />
+                  <FormControl.Feedback type="invalid">
+                    {errors.username !== undefined && touched.username !== undefined ? errors.username : null}
+                  </FormControl.Feedback>
                 </Form.Group>
                 <Form.Group>
                   <Form.Label>Password</Form.Label>
-                  <Form.Control type="password" />
+                  <FormControl
+                    type="password"
+                    name="password"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.password.toLowerCase()}
+                    isInvalid={!!(errors.password !== undefined && touched.password !== undefined)}
+                  />
+                  <FormControl.Feedback type="invalid">
+                    {errors.password !== undefined && touched.password !== undefined ? errors.password : null}
+                  </FormControl.Feedback>
                 </Form.Group>
                 <div className="d-flex align-items-center justify-content-between">
                   <Form.Check type="checkbox" label="Remember me!" />
                   <Button variant="link" className="text-secondary">Forgot Password?</Button>
                 </div>
                 <div className="d-flex flex-column align-items-center gap-3 pt-3 footer-btn">
-                  <Button variant="dark" className="login-btn w-100">Login</Button>
+                  <Button variant="dark" className="login-btn w-100"
+                    disabled={isSubmitting ||
+                      Object.values(values).filter(it => it === "").length !== 0 ||
+                      Object.values(errors).filter(it => it !== "").length !== 0}
+                    type="submit"
+                  >Login</Button>
                   <Button variant="light" className="w-100">Login with google</Button>
                 </div>
               </Form>

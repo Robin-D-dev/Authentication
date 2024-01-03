@@ -17,7 +17,7 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    loginRequest: (state: IAuthReducer, action: IActionWithPayload<ILoginPayload>) => {
+    loginRequest: (state: IAuthReducer, _action: IActionWithPayload<ILoginPayload>) => {
       state.isFetching = true;
       state.error = "";
     },

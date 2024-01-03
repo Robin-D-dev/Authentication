@@ -3,7 +3,7 @@ import { takeAuthRequest } from "../sagas";
 
 function* rootSaga(): Generator<AllEffect<ForkEffect<void>>, void, unknown> {
   yield all([
-    fork(takeAuthRequest)
+    fork(takeAuthRequest),
   ])
 }
 

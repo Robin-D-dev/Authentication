@@ -1,27 +1,29 @@
-import axios from "axios";
 import { ForkEffect, put, takeLatest } from "redux-saga/effects";
-import { loginFailure, loginResponse } from "../reducers/auth";
+import { loginFailure, loginRequest, loginResponse } from "../reducers/auth";
+import { apiCall, defaultHeader } from "../utils";
 
 
 function* login(request: any): Generator<any, void, any> {
 
   try {
-
+    const headers = defaultHeader();
     const data = request.payload;
-    const requestParams = {
-      method: "POST",
-      url: "https://dummyjson.com/auth/login",
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+    const apiPath = "https://dummyjson.com/auth/login";
+    const httpMethod = "POST";
+    const response: any = yield apiCall({ headers, data, apiPath, action: httpMethod });
+
+    console.log("Saga->", response.data);
+    if (response.status === 200) {
+      yield put(loginResponse({
+        token: response.data.token,
+        email: response.data.email
+      }));
     }
-    const response = axios(requestParams).then(res => res);
-    console.log(response);
-    // put(loginResponse(response));
   } catch (error) {
-    console.log('Error', error);
+    yield put(loginFailure(JSON.stringify(error)));
   }
 }
 
 export function* takeAuthRequest(): Generator<ForkEffect<never>, void, unknown> {
-  yield takeLatest(loginFailure, login);
+  yield takeLatest(loginRequest.type, login);
 }
