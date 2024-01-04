@@ -18,6 +18,7 @@ export interface ICurrentUser {
 export interface IAuthReducer {
   isFetching: boolean;
   isAuthenticated: boolean;
+  userInfo: ILoginPayload;
   currentUser: ICurrentUser;
   error: string;
 }

@@ -1,21 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Form, FormControl, Image, Row } from "react-bootstrap";
 import "../../assets/stylesheets/pages/login.scss";
 import chatBot from "../../assets/images/chatbot.png";
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginRequest } from "../../reducers/auth";
 import { regexExpressions } from "../../utils";
+import { IStore } from "../../types/store";
 
 
 
 const Login = () => {
 
+  const [isRememberMe, setRememberMe] = useState(false);
+  const currentUser = useSelector((state: IStore) => state.auth.currentUser);
+  const userInfo = useSelector((state: IStore) => state.auth.userInfo);
+
   const dispatch = useDispatch();
   const { values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting } = useFormik({
     initialValues: {
-      username: "",
-      password: ""
+      username: localStorage.getItem("email") ?? "",
+      password: localStorage.getItem("password") ?? ""
     },
     onSubmit: (values, { setSubmitting }) => {
       dispatch(
@@ -29,6 +34,14 @@ const Login = () => {
       setSubmitting(false);
     }
   });
+
+  useEffect(() => {
+    if (isRememberMe && currentUser.email === userInfo.email) {
+      localStorage.setItem("email", userInfo.email ?? "");
+      localStorage.setItem("password", userInfo.password ?? "");
+    }
+  }, [currentUser.token]);
+
   return (
     <Container fluid className="login__container">
       <Row>
@@ -74,7 +87,13 @@ const Login = () => {
                   </FormControl.Feedback>
                 </Form.Group>
                 <div className="d-flex align-items-center justify-content-between">
-                  <Form.Check type="checkbox" label="Remember me!" />
+                  <Form.Check
+                    type="checkbox"
+                    name="isRememberMe"
+                    label="Remember me!"
+                    checked={isRememberMe}
+                    onChange={() => setRememberMe(!isRememberMe)}
+                  />
                   <Button variant="link" className="text-secondary">Forgot Password?</Button>
                 </div>
                 <div className="d-flex flex-column align-items-center gap-3 pt-3 footer-btn">

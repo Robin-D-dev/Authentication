@@ -12,7 +12,6 @@ function* login(request: any): Generator<any, void, any> {
     const httpMethod = "POST";
     const response: any = yield apiCall({ headers, data, apiPath, action: httpMethod });
 
-    console.log("Saga->", response.data);
     if (response.status === 200) {
       yield put(loginResponse({
         token: response.data.token,
