@@ -1,5 +1,5 @@
-import { IAuthReducer } from "./auth";
+import { IAuthReducer } from "./reducers/auth";
 
 export interface IStore {
-  auth: IAuthReducer
+  auth: IAuthReducer,
 }

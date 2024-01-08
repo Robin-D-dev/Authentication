@@ -1,6 +1,14 @@
+import { Col, Container, Row } from "react-bootstrap";
 
+const Dashboard : React.FC = () => {
 
-
-const Dashboard = () => <section>Dashbaord</section>
+  return (
+    <Container className="dashboard">
+      <Row>
+        <Col>Dashboard</Col>
+      </Row>
+    </Container>
+  );
+}
 
 export default Dashboard;

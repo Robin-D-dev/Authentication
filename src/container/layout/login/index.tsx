@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Button, Col, Container, Form, FormControl, Image, Row } from "react-bootstrap";
-import "../../assets/stylesheets/pages/login.scss";
-import chatBot from "../../assets/images/chatbot.png";
+import "../../../assets/stylesheets/pages/login.scss";
+import chatBot from "../../../assets/images/chatbot.png";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import { loginRequest } from "../../reducers/auth";
-import { regexExpressions } from "../../utils";
-import { IStore } from "../../types/store";
+import { regexExpressions } from "../../../utils";
+import { IStore } from "../../../types/store";
+import { loginRequest } from "../../../reducers";
 
 
 
@@ -17,6 +17,7 @@ const Login = () => {
   const userInfo = useSelector((state: IStore) => state.auth.userInfo);
 
   const dispatch = useDispatch();
+
   const { values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting } = useFormik({
     initialValues: {
       username: localStorage.getItem("email") ?? "",
@@ -35,12 +36,16 @@ const Login = () => {
     }
   });
 
+  const handleRememberMe = useCallback(() => {
+    setRememberMe((prevRememberMe: boolean) => !prevRememberMe);
+  }, []);
+
   useEffect(() => {
-    if (isRememberMe && currentUser.email === userInfo.email) {
-      localStorage.setItem("email", userInfo.email ?? "");
+    if (isRememberMe && currentUser.username === userInfo.username) {
+      localStorage.setItem("username", userInfo.username ?? "");
       localStorage.setItem("password", userInfo.password ?? "");
     }
-  }, [currentUser.token]);
+  }, [currentUser.token, currentUser.username, userInfo.username, userInfo.password,isRememberMe]);
 
   return (
     <Container fluid className="login__container">
@@ -92,7 +97,7 @@ const Login = () => {
                     name="isRememberMe"
                     label="Remember me!"
                     checked={isRememberMe}
-                    onChange={() => setRememberMe(!isRememberMe)}
+                    onChange={handleRememberMe}
                   />
                   <Button variant="link" className="text-secondary">Forgot Password?</Button>
                 </div>

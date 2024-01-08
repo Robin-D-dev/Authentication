@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { IAuthReducer, ICurrentUser, ILoginPayload } from "../../types/auth";
+import { IAuthReducer, ICurrentUser, ILoginPayload } from "../../types/reducers/auth";
 import { IActionWithPayload } from "../../types/common/reducer";
 
 

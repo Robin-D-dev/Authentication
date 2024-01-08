@@ -1,0 +1,11 @@
+header {
+  height    : 60px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding   : 0 20px;
+
+  .logout-icon {
+    width : 25px;
+    height: 25px;
+    cursor: pointer;
+  }
+}
