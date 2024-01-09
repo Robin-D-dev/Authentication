@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { IProductsReducer, IproductList } from "../../types/reducers/products";
+import { IProductsReducer, IproductResponse } from "../../types/reducers/products";
 import { IActionWithPayload } from "../../types/common/reducer";
 
 
-const initialState = {
+const initialState: IProductsReducer = {
+  skip: 0,
   isFetching: false,
-  data: [],
+  data: {} as IproductResponse,
   error: ""
 }
 
@@ -14,12 +15,14 @@ const productSlice = createSlice({
   name: "products",
   initialState,
   reducers: {
-    productRequest: (state: IProductsReducer) => {
+    productRequest: (state: IProductsReducer, action: IActionWithPayload<number>) => {
       state.isFetching = true;
+      state.skip = action.payload;
       state.error = "";
     },
-    productResponse: (state: IProductsReducer, action: IActionWithPayload<IproductList[]>) => {
+    productResponse: (state: IProductsReducer, action: IActionWithPayload<IproductResponse>) => {
       state.isFetching = false;
+      console.log("Payload", action.payload);
       state.data = action.payload;
       state.error = "";
     },

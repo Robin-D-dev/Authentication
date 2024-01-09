@@ -4,7 +4,6 @@ import { apiCall, defaultHeader } from "../../utils";
 
 
 function* login(request: any): Generator<any, void, any> {
-
   try {
     const headers = defaultHeader();
     const data = request.payload;

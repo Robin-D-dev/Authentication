@@ -1,11 +1,19 @@
 
 export interface IProductsReducer {
+  skip: number;
   isFetching: boolean;
-  data: IproductList[];
+  data: IproductResponse;
   error: string;
 }
 
-export interface IproductList {
+export interface IproductResponse {
+  products: IProduct[],
+  limit: number,
+  skip: number,
+  total: number,
+}
+
+export interface IProduct {
   title: string;
   description: string;
   price: number;
